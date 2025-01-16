@@ -1,6 +1,7 @@
 # Standard library imports
 import copy
 import json
+import inspect
 from collections import defaultdict
 from typing import List, Callable, Union
 
@@ -116,8 +117,9 @@ class Swarm:
                 debug, f"Processing tool call: {name} with arguments {args}")
 
             func = function_map[name]
+            params = inspect.signature(func).parameters
             # pass context_variables to agent functions
-            if __CTX_VARS_NAME__ in func.__code__.co_varnames:
+            if __CTX_VARS_NAME__ in params:
                 args[__CTX_VARS_NAME__] = context_variables
             raw_result = function_map[name](**args)
 
